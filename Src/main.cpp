@@ -1,5 +1,6 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/vector_float4.hpp"
+#include "shaders.hpp"
 #include "vulkan/vulkan_core.h"
 #include <iostream>
 #define GLFW_INCLUDE_VULKAN
@@ -26,6 +27,7 @@ auto main(int argc, char** argv) -> int {
     glm::mat4 matrix;
     glm::vec4 vec;
     auto test = matrix * vec;
+    mini_engine::Shader_Comp comp{"../Vendor/Executable/glslc","../Shader/Input", "../Shader/Output"};
 
     while (!glfwWindowShouldClose(window.get_window())) {
         glfwPollEvents();
