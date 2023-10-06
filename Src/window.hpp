@@ -26,16 +26,16 @@ public:
   // SubstructureRedirectMask, FocusChangeMask, PropertyChangeMask,
   // ColormapChangeMask, OwnerGrabButtonMask
   [[nodiscard("possible return value is BadWindow: A value for a Window "
-              "argument does not name a defined window")]] auto
-  set_attributes(long attr) const -> bool;
+              "argument does not name a defined window")]] 
+  auto set_attributes(long attr) const -> bool;
 
   // handling event should be for another class to handle. Might change later
-  [[nodiscard("returns an optional event")]] auto get_event(void)
-      -> std::optional<XEvent>;
+  [[nodiscard("returns an optional event")]] 
+  auto get_event(void) -> std::optional<XEvent>;
 
   // check if window manager destroyed window
-  [[nodiscard("returns bool to see if wm destroyed window")]] auto
-  check_destroy_win(const XEvent &event) const -> bool;
+  [[nodiscard("returns bool to see if wm destroyed window")]]
+  auto check_destroy_win(const XEvent &event) const -> bool;
 
   ~Window_T();
 
@@ -52,6 +52,10 @@ private:
   Window m_window;
   /// X11display
   Display *m_display;
+  /// Monitor
+  Screen *m_screen;
+  /// number of screens
+  int m_num_screens;
   /// Close Window message
   Atom m_wm_delete;
   /// Graphic Context

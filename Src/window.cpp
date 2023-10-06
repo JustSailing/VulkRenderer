@@ -14,6 +14,7 @@ Window_T::Window_T(int w, int h, std::string name)
   // TODO: handle possible errors of the below initializations
   m_display = XOpenDisplay(nullptr);
   auto screen = DefaultScreen(m_display);
+  m_screen = XDefaultScreenOfDisplay(m_display);
   m_window = XCreateSimpleWindow(m_display, RootWindow(m_display, screen), 0, 0,
                                  800, 600, 1, XBlackPixel(m_display, screen),
                                  XWhitePixel(m_display, screen));
@@ -25,6 +26,12 @@ Window_T::Window_T(int w, int h, std::string name)
   XSetWMProtocols(m_display, m_window, &m_wm_delete, 1);
   m_gc = XCreateGC(m_display, m_window, 0, nullptr);
   XSetForeground(m_display, m_gc, WhitePixel(m_display, screen));
+  m_num_screens = XScreenCount(m_display);
+  fprintf(stderr,
+          "%s (monitor) size width: %d, height: %d, (window) width: %d, "
+          "height: %d, Number of screens: %d\n",
+          CGRN("[Success]"), m_screen->width, m_screen->height, m_width,
+          m_height, m_num_screens);
 }
 
 Window_T::~Window_T() {
