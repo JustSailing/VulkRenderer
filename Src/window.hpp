@@ -1,36 +1,43 @@
 #pragma once
-// Library 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+// Library
+#include <X11/Xlib.h>
 
-// System 
+// System
+#include <optional>
 #include <string>
-#include <vector>
 
 namespace mini_engine {
-struct Monitors {
-  GLFWmonitor *primary;
-  std::vector<GLFWmonitor *> secondaries;
-  uint32_t num_of_moniters;
-};
 
-class Window {
+class Window_T {
 public:
-  explicit Window(int w, int h, std::string title, bool vulkan,
-                  GLFWmonitor *monitor = nullptr, GLFWwindow *window = nullptr);
+  explicit Window_T(int w, int h, std::string title);
 
-  Window(const Window &) = delete;
+  Window_T(const Window_T &) = delete;
 
-  Window &operator=(const Window &) = delete;
+  Window_T &operator=(const Window_T &) = delete;
 
-  auto get_monitors() const -> const Monitors & {return m_monitors;};
+  // mask given to have x11 to report events ex
+  //
+  // KeyPressMask, KeyReleaseMask, ButtonPressMask, ButtonReleaseMask,
+  // EnterWindowMask LeaveWindowMask, PointerMotionMask, PointerMotionHintMask,
+  // Button1MotionMask Button2MotionMask, Button3MotionMask, Button4MotionMask,
+  // Button5MotionMask, KeyMapState Mask, ExposureMask, VisibilityChangeMask,
+  // StructureNotifiyMask, ResizeRedirectMask, SubstructureNotifyMask,
+  // SubstructureRedirectMask, FocusChangeMask, PropertyChangeMask,
+  // ColormapChangeMask, OwnerGrabButtonMask
+  [[nodiscard("possible return value is BadWindow: A value for a Window "
+              "argument does not name a defined window")]] auto
+  set_attributes(long attr) const -> bool;
 
-  /// should only be called after get_monitors
-  auto inline get_monitor_sz(GLFWmonitor *mon, int *width, int *height) const -> void;
+  // handling event should be for another class to handle. Might change later
+  [[nodiscard("returns an optional event")]] auto get_event(void)
+      -> std::optional<XEvent>;
 
-  auto inline get_window(void) const -> GLFWwindow * { return m_win; }
+  // check if window manager destroyed window
+  [[nodiscard("returns bool to see if wm destroyed window")]] auto
+  check_destroy_win(const XEvent &event) const -> bool;
 
-  ~Window();
+  ~Window_T();
 
 private:
   /// Member variables ----------------------------------------------- //
@@ -41,24 +48,16 @@ private:
   int m_height;
   /// title of window
   std::string m_win_name;
-  /// GLFWwindow created in initWindow
-  GLFWwindow *m_win;
-  /// Monitors struct that holds details about monitors
-  Monitors m_monitors;
+  /// X11 window main
+  Window m_window;
+  /// X11display
+  Display *m_display;
+  /// Close Window message
+  Atom m_wm_delete;
+  /// Graphic Context
+  GC m_gc; // may remove this when vulcan is set up
   // TODO: Add icon for window
 
   // Member functions ------------------------------------------------ //
-
-  /*
-      Creates glfw window (called from constructor)
-      @param mon Pointer to a GLFWmonitor. Default nullptr
-      @param win pointer to a GLFWwindow. Default nullptr
-      @return void
-
-  */
-  auto init_window(GLFWmonitor *mon = nullptr, GLFWwindow *win = nullptr)
-      -> void;
-
-  auto init_monitors(void) -> void;
 };
 } // namespace mini_engine
