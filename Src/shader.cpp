@@ -26,7 +26,8 @@ auto Shader_Comp::frag_compile_amt() const -> const int { return m_frag_count; }
 auto Shader_Comp::read_file(const path &p) -> vector<char> {
   std::ifstream file(p, std::ios::ate | std::ios::binary);
   if (file.fail()) {
-    fprintf(stderr, "%s file in read_file failure\n", CRED("Shader Compilation: "));
+    fprintf(stderr, "%s file in read_file failure\n",
+            CRED("Shader Compilation: "));
     exit(2);
   }
   auto file_size = static_cast<size_t>(file.tellg());
@@ -41,7 +42,7 @@ auto Shader_Comp::read_file(const path &p) -> vector<char> {
 auto Shader_Comp::compile_shader() -> void {
   using recursive_dir_iter = std::filesystem::recursive_directory_iterator;
   for (auto const &file : recursive_dir_iter{m_in_dir}) {
-    // std::cout << file.path().extension().string() << '\n'; // test
+    // auto f = file.path().extension().string().c_str();
     if (file.path().extension().string() == ".vert") {
       std::string exe = m_shaderc.string() + " " + file.path().string() +
                         " -o " + m_out_dir.string() + "/" +
@@ -57,15 +58,15 @@ auto Shader_Comp::compile_shader() -> void {
                         " -o " + m_out_dir.string() + "/" +
                         file.path().filename().string() + ".spv";
       if (std::system(static_cast<const char *>(exe.c_str())) != 0) {
-        fprintf(stderr, "Shader: failed to compile %s\n",
+        fprintf(stderr, "%s failed to compile %s\n", CRED("Shader: "),
                 file.path().string().c_str());
         continue;
       }
       std::cout << CGRN("Shader: ") << exe << " was executed\n";
       ++m_frag_count;
     } else {
-      fprintf(stderr, "%s: Shader: file not a vert or frag file: %s\n", CYEL("Warning"),
-              file.path().c_str());
+      fprintf(stderr, "%s: Shader: file not a vert or frag file: %s\n",
+              CYEL("Warning"), file.path().c_str());
       continue;
     }
   }
