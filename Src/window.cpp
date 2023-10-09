@@ -9,8 +9,8 @@
 
 namespace mini_engine {
 // Public
-Window_T::Window_T(int w, int h, std::string name)
-    : m_width{w}, m_height{h}, m_win_name{name} {
+Window_T::Window_T(int w, int h, std::string name, bool debug)
+    : m_width{w}, m_height{h}, m_win_name{name}, m_debug{debug} {
   // TODO: handle possible errors of the below initializations
   m_display = XOpenDisplay(nullptr);
   auto screen = DefaultScreen(m_display);
@@ -27,11 +27,13 @@ Window_T::Window_T(int w, int h, std::string name)
   m_gc = XCreateGC(m_display, m_window, 0, nullptr);
   XSetForeground(m_display, m_gc, WhitePixel(m_display, screen));
   m_num_screens = XScreenCount(m_display);
-  fprintf(stderr,
-          "%s (monitor) size width: %d, height: %d, (window) width: %d, "
-          "height: %d, Number of screens: %d\n",
-          CGRN("[Success]"), m_screen->width, m_screen->height, m_width,
-          m_height, m_num_screens);
+  if (m_debug) {
+    fprintf(stderr,
+            "%s (monitor) size width: %d, height: %d, (window) width: %d, "
+            "height: %d, Number of screens: %d\n",
+            CGRN("[Success]"), m_screen->width, m_screen->height, m_width,
+            m_height, m_num_screens);
+  }
 }
 
 Window_T::~Window_T() {
@@ -42,7 +44,7 @@ Window_T::~Window_T() {
             CYEL("[Warning] "));
     return;
   }
-  fprintf(stderr, "%sWindow Destructor Called\n", CGRN("Window_T: "));
+  // fprintf(stderr, "%sWindow Destructor Called\n", CGRN("Window_T: "));
 }
 
 auto Window_T::set_attributes(long attr) const -> bool {

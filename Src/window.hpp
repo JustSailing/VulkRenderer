@@ -10,7 +10,7 @@ namespace mini_engine {
 
 class Window_T {
 public:
-  explicit Window_T(int w, int h, std::string title);
+  explicit Window_T(int w, int h, std::string title, bool debug = false);
 
   Window_T(const Window_T &) = delete;
 
@@ -60,6 +60,8 @@ private:
   Atom m_wm_delete;
   /// Graphic Context
   GC m_gc; // may remove this when vulcan is set up
+  /// if debugging output to console
+  bool m_debug;
   // TODO: Add icon for window
 
   // Member functions ------------------------------------------------ //
