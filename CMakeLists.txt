@@ -16,8 +16,8 @@ find_package(X11 REQUIRED)
 link_libraries(${X11_LIBRARIES})
 include_directories(${X11_INCLUDE_DIR})
 
-add_executable(Renderer Src/main.cpp Src/window.cpp Src/shader.cpp)
-target_link_libraries(Renderer ${Vulkan} ${X11_LIBRARIES})
+add_executable(Renderer Src/main.cpp Src/window.cpp Src/shader.cpp Src/device.cpp)
+target_link_libraries(Renderer ${Vulkan} X11 pthread dl Xxf86vm Xrandr Xi)
 
 message(${CMAKE_BINARY_DIR})
 
