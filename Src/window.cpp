@@ -71,7 +71,8 @@ auto Window_T::get_event() -> std::optional<XEvent> {
 }
 
 auto Window_T::check_destroy_win(const XEvent &event) const -> bool {
-  if (m_wm_delete == event.xclient.data.l[0])
+  if (m_wm_delete ==
+      static_cast<const long unsigned int>(event.xclient.data.l[0]))
     return true;
   return false;
 }
