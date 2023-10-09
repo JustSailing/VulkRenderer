@@ -1,4 +1,5 @@
 #include "colorIO.hpp"
+#include "device.hpp"
 #include "shaders.hpp"
 #include "window.hpp"
 #include <X11/X.h>
@@ -13,17 +14,12 @@ auto main(int argc, char **argv) -> int {
   if (!window.set_attributes(KeyPressMask | KeyReleaseMask |
                              StructureNotifyMask))
     std::cout << "setting attributes for X11 window failed\n";
-  uint32_t extensionCount = 0;
-  vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-
-  std::cout << extensionCount << " Extensions supported\n";
-
   glm::mat4 matrix;
   glm::vec4 vec;
   auto test = matrix * vec;
   mini_engine::Shader_Comp comp{"../Vendor/Executable/glslc", "../Shader/Input",
                                 "../Shader/Output"};
-
+  auto dev = mini_engine::Vulkan_Device("Vulkan Window", false);
   while (1) {
     std::optional<XEvent> event = window.get_event();
     if (event.has_value()) {
