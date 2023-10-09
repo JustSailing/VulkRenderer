@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -51,7 +52,7 @@ auto Shader_Comp::compile_shader() -> void {
         fprintf(stderr, "Shader: failed to compile %s\n", file.path().c_str());
         continue;
       }
-      std::cout << CGRN("Shader: ") << exe << " was executed\n";
+      std::cout << CGRN("[Shader] ") << exe << " was executed\n";
       ++m_vert_count;
     } else if (file.path().extension().string() == ".frag") {
       std::string exe = m_shaderc.string() + " " + file.path().string() +
@@ -62,11 +63,11 @@ auto Shader_Comp::compile_shader() -> void {
                 file.path().string().c_str());
         continue;
       }
-      std::cout << CGRN("Shader: ") << exe << " was executed\n";
+      std::cout << CGRN("[Shader] ") << exe << " was executed\n";
       ++m_frag_count;
     } else {
-      fprintf(stderr, "%s: Shader: file not a vert or frag file: %s\n",
-              CYEL("Warning"), file.path().c_str());
+      fprintf(stderr, "%s Shader: file not a vert or frag file: %s\n",
+              CYEL("[Warning]"), file.path().c_str());
       continue;
     }
   }

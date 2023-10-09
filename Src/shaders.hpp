@@ -34,9 +34,9 @@ private:
   /// Member Variables
   int m_vert_count{0};
   int m_frag_count{0};
+  path m_shaderc;
   path m_in_dir;
   path m_out_dir;
-  path m_shaderc;
   // NOTE: Should probably add booleans to check if directorys are valid as well
   // as if shader compiler is valid if we want to change compilers or I/O
   // directories
