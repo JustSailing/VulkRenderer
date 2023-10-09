@@ -81,6 +81,7 @@ Vulkan_Device::Vulkan_Device(std::string app_name, bool debug) {
       case vk::PhysicalDeviceType::eCpu: return "Physical Device Type: Other";
         break;
       }
+      return "Physical Device Type: Unknown";
     };
     fprintf(stderr, "\t%s\n", type(props.deviceType));
     for (auto const &q : some) {
