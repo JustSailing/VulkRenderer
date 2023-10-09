@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vulkan/vulkan.hpp>
 
-auto main(int argc, char **argv) -> int {
+auto main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) -> int {
   mini_engine::Window_T window(800, 600, "Vulkan Window");
   if (!window.set_attributes(KeyPressMask | KeyReleaseMask |
                              StructureNotifyMask))
@@ -19,7 +19,7 @@ auto main(int argc, char **argv) -> int {
   auto test = matrix * vec;
   mini_engine::Shader_Comp comp{"../Vendor/Executable/glslc", "../Shader/Input",
                                 "../Shader/Output"};
-  auto dev = mini_engine::Vulkan_Device("Vulkan Window", false);
+  auto dev = mini_engine::Vulkan_Device("Vulkan Window");
   while (1) {
     std::optional<XEvent> event = window.get_event();
     if (event.has_value()) {
