@@ -13,15 +13,15 @@
 namespace mini_engine {
 // Public
 Shader_Comp::Shader_Comp(const path &path_to_shaderc, const path &path_to_input,
-                         const path &path_to_output)
+                         const path &path_to_output, bool debug)
     : m_shaderc{path_to_shaderc}, m_in_dir{path_to_input},
-      m_out_dir{path_to_output} {
+      m_out_dir{path_to_output}, m_debug{debug} {
   // TODO: check if directory exist
   compile_shader();
 }
 
-auto Shader_Comp::vert_compile_amt() const -> const int { return m_vert_count; }
-auto Shader_Comp::frag_compile_amt() const -> const int { return m_frag_count; }
+auto Shader_Comp::vert_compile_amt() const -> int { return m_vert_count; }
+auto Shader_Comp::frag_compile_amt() const -> int { return m_frag_count; }
 
 // Static
 auto Shader_Comp::read_file(const path &p) -> vector<char> {
@@ -52,7 +52,9 @@ auto Shader_Comp::compile_shader() -> void {
         fprintf(stderr, "Shader: failed to compile %s\n", file.path().c_str());
         continue;
       }
-      std::cout << CGRN("[Shader] ") << exe << " was executed\n";
+      if (m_debug) {
+        std::cout << CGRN("[Shader] ") << exe << " was executed\n";
+      }
       ++m_vert_count;
     } else if (file.path().extension().string() == ".frag") {
       std::string exe = m_shaderc.string() + " " + file.path().string() +
@@ -63,11 +65,15 @@ auto Shader_Comp::compile_shader() -> void {
                 file.path().string().c_str());
         continue;
       }
-      std::cout << CGRN("[Shader] ") << exe << " was executed\n";
+      if (m_debug) {
+        std::cout << CGRN("[Shader] ") << exe << " was executed\n";
+      }
       ++m_frag_count;
     } else {
-      fprintf(stderr, "%s Shader: file not a vert or frag file: %s\n",
-              CYEL("[Warning]"), file.path().c_str());
+      if (m_debug) {
+        fprintf(stderr, "%s Shader: file not a vert or frag file: %s\n",
+                CYEL("[Warning]"), file.path().c_str());
+      }
       continue;
     }
   }
