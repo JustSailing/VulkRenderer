@@ -4,6 +4,7 @@ project(Renderer)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -Wstrict-aliasing -Weffc++")
 #set(CMAKE_LIBRARY_PATH ./Vendor/Lib)
 
 include_directories("Vendor/Include")
