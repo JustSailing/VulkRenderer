@@ -1,12 +1,29 @@
+#include <vector>
+#include <string>
+
 #include <vulkan/vulkan.hpp>
 
 namespace mini_engine {
 class Vulkan_Device {
 public:
-  explicit Vulkan_Device();
+  explicit Vulkan_Device(std::string app_name, bool debug);
   ~Vulkan_Device();
-  auto create_instance(std::string app_name) -> void;
+  
 private:
-VkInstance m_vk_instace;
+/// Member functions
+auto create_instance(std::string app_name) -> void;
+
+/// Member variables
+vk::Instance m_vk_instance{};
+// supported vulkan api version
+uint32_t m_version;
+// supported extension properties
+std::vector<vk::ExtensionProperties> m_ext_props;
+// supported layer properties
+std::vector<vk::LayerProperties> m_layer_props;
+// debugger
+vk::DebugUtilsMessengerEXT m_debugger;
+// physical devices
+std::vector<vk::PhysicalDevice> m_physical_devs;
 };
 } // namespace mini_engine
